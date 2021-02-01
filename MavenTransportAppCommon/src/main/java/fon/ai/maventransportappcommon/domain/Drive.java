@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -230,5 +231,59 @@ public class Drive implements Serializable, IGeneralEntity{
     public void setCosts(ArrayList<Cost> costs) {
         this.costs = costs;
     }
+
+    @Override
+    public String toString() {
+        return id +"";
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Drive other = (Drive) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.facturePrice) != Double.doubleToLongBits(other.facturePrice)) {
+            return false;
+        }
+        if (!Objects.equals(this.cost, other.cost)) {
+            return false;
+        }
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        if (!Objects.equals(this.tr, other.tr)) {
+            return false;
+        }
+        if (!Objects.equals(this.t, other.t)) {
+            return false;
+        }
+        if (!Objects.equals(this.d, other.d)) {
+            return false;
+        }
+        if (!Objects.equals(this.costs, other.costs)) {
+            return false;
+        }
+        return true;
+    }
+
+
+    
+    
     
 }
