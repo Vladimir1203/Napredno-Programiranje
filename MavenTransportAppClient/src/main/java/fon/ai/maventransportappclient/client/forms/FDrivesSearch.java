@@ -5,6 +5,8 @@
  */
 package fon.ai.maventransportappclient.client.forms;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import fon.ai.maventransportappclient.controller.CommunicationController;
 import fon.ai.maventransportappcommon.domain.Cost;
 import fon.ai.maventransportappcommon.domain.CostType;
@@ -18,6 +20,15 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import fon.ai.maventransportappclient.models.ModelDriveSearch;
+import fon.ai.maventransportappcommon.domain.Driver;
+import fon.ai.maventransportappcommon.domain.Trailer;
+import fon.ai.maventransportappcommon.domain.Truck;
+import fon.ai.maventransportappcommon.domain.VehicleType;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -65,6 +76,9 @@ public class FDrivesSearch extends javax.swing.JFrame {
         jButtonUpdate = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jButtonJSON = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jTextJSON = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Searching drives");
@@ -121,36 +135,54 @@ public class FDrivesSearch extends javax.swing.JFrame {
 
         jLabel2.setText("Pretraga radi po broju CMR-a, broju vozaca i broju kamiona");
 
+        jButtonJSON.setText("Izvezi u JSON");
+        jButtonJSON.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonJSONActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Uvezi iz JSON");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jTextName, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(jButtonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonDeclineFilter)))))
-                .addGap(23, 23, 23))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonDeclineFilter)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonJSON)))))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addGap(64, 64, 64)
                 .addComponent(jButtonUpdate)
-                .addGap(60, 60, 60)
+                .addGap(27, 27, 27)
                 .addComponent(jButtonDelete)
-                .addGap(64, 64, 64)
+                .addGap(31, 31, 31)
                 .addComponent(jButtonCancel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTextJSON, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,15 +193,18 @@ public class FDrivesSearch extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonSearch)
-                    .addComponent(jButtonDeclineFilter))
+                    .addComponent(jButtonDeclineFilter)
+                    .addComponent(jButtonJSON))
                 .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonDelete)
                     .addComponent(jButtonUpdate)
-                    .addComponent(jButtonCancel))
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addComponent(jButtonCancel)
+                    .addComponent(jButton1)
+                    .addComponent(jTextJSON, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
@@ -257,16 +292,69 @@ public class FDrivesSearch extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
+    private void jButtonJSONActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonJSONActionPerformed
+        /*try{
+            Drive drive = CommunicationController.getInstance().importFromJSON();
+            JOptionPane.showMessageDialog(this, "Sistem je uspesno uvezao racun.");
+            CommunicationController.getInstance().prikaziDetalje(drive);
+            //pretraziRacune();
+        }catch(Exception ex){
+            
+        }*/
+        //istestirajJSONUpis();
+        
+        int row = jTable1.getSelectedRow();
+        if(row != -1){
+            ModelDriveSearch mds =  (ModelDriveSearch) jTable1.getModel();
+            Drive d = mds.getSelectedRow(row);
+            try {
+                CommunicationController.getInstance().izveziUJson(d);
+                JOptionPane.showMessageDialog(this, "Voznja je uspesno izvezena u JSON fajl. Proverite folder projekta!");
+                srediTabelu();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Morate odabrati voznju za serijalizaciju u JSON!");
+        }
+    }//GEN-LAST:event_jButtonJSONActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Drive voznja = null; 
+        try{
+            String putanja = jTextJSON.getText();
+            voznja = CommunicationController.getInstance().deserijalizacijaJSON(putanja);
+        }catch(IOException ex){
+            JOptionPane.showMessageDialog(this, "Bacen IO EXC");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+        
+            if(voznja != null){
+                JOptionPane.showMessageDialog(this, "Uspesno unesen JSON objekat. Pogledajte u tabeli!");
+                ModelDriveSearch mds =  (ModelDriveSearch) jTable1.getModel();
+                mds.add(voznja);
+                mds.fireTableDataChanged();
+            }else {
+                JOptionPane.showMessageDialog(this, "Neuspesno unesen JSON objekat!");
+            }
+            //CommunicationController.getInstance().insertDrive(voznja);
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDeclineFilter;
     private javax.swing.JButton jButtonDelete;
+    private javax.swing.JButton jButtonJSON;
     private javax.swing.JButton jButtonSearch;
     private javax.swing.JButton jButtonUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextJSON;
     private javax.swing.JTextField jTextName;
     // End of variables declaration//GEN-END:variables
 

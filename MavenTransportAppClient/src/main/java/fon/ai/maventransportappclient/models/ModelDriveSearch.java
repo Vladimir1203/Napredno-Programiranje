@@ -6,6 +6,7 @@
 package fon.ai.maventransportappclient.models;
 
 import fon.ai.maventransportappcommon.domain.Drive;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -36,10 +37,11 @@ public class ModelDriveSearch extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int i, int i1) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Drive d = drives.get(i);
         switch(i1){
             case 0: return d.getId();
-            case 1: return d.getDate().toString();
+            case 1: return sdf.format(d.getDate());
             case 2: return d.getFacturePrice();
             case 3: return d.getT().getRegistrationMark();
             case 4: return d.getTr().getRegistrationMark();
@@ -84,6 +86,8 @@ public class ModelDriveSearch extends AbstractTableModel{
         return drives.get(row);
     }
     
-    
+    public void add(Drive d){
+        drives.add(d);
+    }
     
 }

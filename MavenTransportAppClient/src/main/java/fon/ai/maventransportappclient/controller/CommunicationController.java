@@ -1,6 +1,10 @@
 package fon.ai.maventransportappclient.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import fon.ai.maventransportappclient.client.forms.FDrivesSearch;
 import fon.ai.maventransportappclient.client.forms.FMainForm;
+import fon.ai.maventransportappclient.sesija.BuildGson;
 import fon.ai.maventransportappcommon.domain.Cost;
 import fon.ai.maventransportappcommon.domain.Costs;
 import fon.ai.maventransportappcommon.domain.Drive;
@@ -17,10 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import fon.ai.maventransportappclient.sesija.Sesija;
+import fon.ai.maventransportappcommon.domain.VehicleType;
 import fon.ai.maventransportappcommon.transfer.RequestObject;
 import fon.ai.maventransportappcommon.transfer.ResponseObject;
 import fon.ai.maventransportappcommon.util.Operation;
 import fon.ai.maventransportappcommon.util.ResponseStatus;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommunicationController {
     private static CommunicationController instance;
@@ -258,6 +269,36 @@ public class CommunicationController {
         }else{
             throw response.getException();
         }
+    }
+
+    public Drive importFromJSON() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void prikaziDetalje(Drive drive) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void izveziUJson(Drive d) {
+        try {
+            Drive voznja = vratiVoznjuPoIDu(d);
+            FileWriter fw = new FileWriter("voznja_br"+voznja.getId()+".json");
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            fw.write(gson.toJson(voznja));
+            fw.close();
+        } catch (Exception ex) {
+            System.out.println("Nisam ispisao u JSON");
+            Logger.getLogger(FDrivesSearch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
+    public Drive deserijalizacijaJSON(String putanja) throws Exception{
+        FileReader in = new FileReader(putanja);
+        Gson gson = BuildGson.buildGson();;
+        Drive voznja = gson.fromJson(in, Drive.class);
+        in.close();
+        return voznja;
     }
  
     
