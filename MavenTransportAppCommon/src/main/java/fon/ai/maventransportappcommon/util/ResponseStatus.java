@@ -6,9 +6,21 @@
 package fon.ai.maventransportappcommon.util;
 
 /**
+ * Enum u kome su navedene sve konstante operacija koje odredjuju tip
+ * uspesnosti klijentskog zahteva i serverskog odgovora.
  *
- * @author Windows HD
+ * @author Vladimir
+ * @version 1.0
  */
 public enum ResponseStatus {
-    SUCCESS, ERROR
+
+    /**
+     *Privatni atribut koji predstavlja vrstu statusa odgovra.
+     */
+    SUCCESS,
+
+    /**
+     *Privatni atribut koji predstavlja vrstu statusa odgovra.
+     */
+    ERROR
 }

@@ -6,9 +6,31 @@
 package fon.ai.maventransportappcommon.domain;
 
 /**
+ * Enum koji predstavlja vrstu troska.
  *
- * @author stackOverflow
+ * @author Vladimir
+ * @version 1.0
+ * @see CostType
  */
 public enum CostType {
-    driverSallary, fuel, toll, other
+
+    /**
+     *Atribut koji predstavlja trosak plate zaposlenom.
+     */
+    driverSallary,
+
+    /**
+     *Atribut koji predstavlja trosak za gorivo.
+     */
+    fuel,
+
+    /**
+     *Atribut koji predstavlja trosak putarine.
+     */
+    toll,
+
+    /**
+     *Atribut koji predstavlja ostale troskove.
+     */
+    other
 }
