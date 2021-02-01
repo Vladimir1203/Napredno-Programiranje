@@ -17,7 +17,7 @@ import fon.ai.maventransportappserver.so.AbstractGenericOperation;
 public class UpdateDriveOperation extends AbstractGenericOperation {
 
     @Override
-    protected void validate(Object entity) throws Exception {
+    public void validate(Object entity) throws Exception {
         if (!(entity instanceof Drive)) {
             throw new Exception("Objekat nije validan!");
         }
@@ -25,7 +25,7 @@ public class UpdateDriveOperation extends AbstractGenericOperation {
     }
 
     @Override
-    protected void execute(Object entity) throws Exception {
+    public void execute(Object entity) throws Exception {
         Drive d = (Drive) entity;
         db.izmeni((IGeneralEntity) entity);
         

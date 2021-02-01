@@ -18,7 +18,7 @@ public class SaveTruckOperation extends AbstractGenericOperation{
 
     private List<IGeneralEntity> lista;
     @Override
-    protected void validate(Object entity) throws Exception {
+    public void validate(Object entity) throws Exception {
         if(!(entity instanceof Vehicle)) {
             throw new Exception("Objekat nije validan");
         }
@@ -26,7 +26,7 @@ public class SaveTruckOperation extends AbstractGenericOperation{
     }
 
     @Override
-    protected void execute(Object entity) throws Exception {
+    public void execute(Object entity) throws Exception {
         Vehicle v = (Vehicle) entity;
         lista = db.vratiPoUslovu((IGeneralEntity) entity);
         if (!lista.isEmpty()) {

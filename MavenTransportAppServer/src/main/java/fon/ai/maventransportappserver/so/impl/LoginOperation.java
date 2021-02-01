@@ -18,17 +18,23 @@ public class LoginOperation extends AbstractGenericOperation {
     IGeneralEntity object;
 
     @Override
-    protected void validate(Object entity) throws Exception {
+    public void validate(Object entity) throws Exception {
         if(!(entity instanceof User)) {
             throw new Exception("Objekat nije validan");
         }
     }
 
     @Override
-    protected void execute(Object entity) throws Exception {
+    public void execute(Object entity) throws Exception {
         object = db.vratiPoId((IGeneralEntity)entity);
     }
 
+    public void setObject(IGeneralEntity object) {
+        this.object = object;
+    }
+    
+    
+    
     public IGeneralEntity getObject() {
         return object;
     }

@@ -12,7 +12,7 @@ import fon.ai.maventransportappserver.database.impl.DatabaseBroker;
  * 
  */
 public abstract class AbstractGenericOperation {
-    protected DatabaseBroker db;
+    public DatabaseBroker db;
     
     public AbstractGenericOperation() {
         db = new DatabaseBroker();
@@ -30,9 +30,9 @@ public abstract class AbstractGenericOperation {
         }
     }
     
-    protected abstract void validate(Object entity) throws Exception;
+    public abstract void validate(Object entity) throws Exception;
 
-    protected abstract void execute(Object entity) throws Exception;
+    public abstract void execute(Object entity) throws Exception;
 
     private void startTransaction() throws Exception {
         //Konekcija.getInstance().getConnection().setAutoCommit(false);

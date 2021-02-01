@@ -18,16 +18,19 @@ public class SaveDriveOperation extends AbstractGenericOperation{
     
 
     @Override
-    protected void validate(Object entity) throws Exception {
+    public void validate(Object entity) throws Exception {
         if(!(entity instanceof Drive)) {
             throw new Exception("Objekat nije validan");
         }
     }
 
     @Override
-    protected void execute(Object entity) throws Exception {
+    public void execute(Object entity) throws Exception {
         Drive d = (Drive) entity;
         db.sacuvaj((IGeneralEntity) entity);
+        System.out.println("DOSAO DOVDE");
+        if(d.getCosts() == null)
+            return;
         for(Cost c : d.getCosts()){
             c.setDrive(d);
             db.sacuvaj((IGeneralEntity)c);

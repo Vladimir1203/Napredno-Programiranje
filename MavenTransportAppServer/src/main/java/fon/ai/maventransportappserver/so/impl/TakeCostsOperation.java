@@ -19,14 +19,14 @@ public class TakeCostsOperation extends AbstractGenericOperation{
     private List<IGeneralEntity> lista;
 
     @Override
-    protected void validate(Object entity) throws Exception {
+    public void validate(Object entity) throws Exception {
         if(!(entity instanceof Cost)) {
             throw new Exception("Objekat nije validan");
         }
     }
 
     @Override
-    protected void execute(Object entity) throws Exception {
+    public void execute(Object entity) throws Exception {
         lista = db.vratiSve((IGeneralEntity) entity);
         if(lista.isEmpty()) {
             throw new Exception("Sistem ne moze da vrati troskove!");
